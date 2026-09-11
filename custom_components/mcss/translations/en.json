@@ -8,6 +8,14 @@
           "host": "MCSS API URL",
           "api_key_entity": "API key input_text"
         }
+      },
+      "reconfigure": {
+        "title": "Reconfigure MC Server Soft",
+        "description": "Change the MCSS API URL or API key input_text entity.",
+        "data": {
+          "host": "MCSS API URL",
+          "api_key_entity": "API key input_text"
+        }
       }
     },
     "error": {

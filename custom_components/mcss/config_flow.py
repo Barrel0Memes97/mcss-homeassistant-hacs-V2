@@ -60,7 +60,7 @@ class MCSSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema({
                 vol.Required(
                     CONF_HOST,
-                    default="http://192.168.254.254:25560",
+                    default="http://192.168.254.74:25560",
                 ): str,
                 vol.Required(CONF_API_KEY_ENTITY): selector.EntitySelector(
                     selector.EntitySelectorConfig(domain="input_text")
@@ -72,14 +72,61 @@ class MCSSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
-        return MCSSOptionsFlow(config_entry)
+        return MCSSOptionsFlow()
+
+    async def async_step_reconfigure(self, user_input=None):
+        """Allow the MCSS URL and API-key entity to be changed."""
+        errors = {}
+        entry = self._get_reconfigure_entry()
+
+        if user_input is not None:
+            host = user_input[CONF_HOST].rstrip("/")
+            api_entity = user_input[CONF_API_KEY_ENTITY]
+            state = self.hass.states.get(api_entity)
+
+            if not state or state.state in ("", "unknown", "unavailable"):
+                errors["api_key_entity"] = "invalid_key_entity"
+            else:
+                try:
+                    api = MCSSApi(
+                        async_get_clientsession(self.hass),
+                        host,
+                        state.state,
+                    )
+                    await api.get_servers()
+                except Exception:
+                    errors["base"] = "cannot_connect"
+                else:
+                    return self.async_update_reload_and_abort(
+                        entry,
+                        data_updates={
+                            CONF_HOST: host,
+                            CONF_API_KEY_ENTITY: api_entity,
+                        },
+                    )
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=vol.Schema({
+                vol.Required(
+                    CONF_HOST,
+                    default=entry.data.get(
+                        CONF_HOST, "http://192.168.254.74:25560"
+                    ),
+                ): str,
+                vol.Required(
+                    CONF_API_KEY_ENTITY,
+                    default=entry.data.get(CONF_API_KEY_ENTITY, ""),
+                ): selector.EntitySelector(
+                    selector.EntitySelectorConfig(domain="input_text")
+                ),
+            }),
+            errors=errors,
+        )
 
 
 class MCSSOptionsFlow(config_entries.OptionsFlow):
     """Integration settings shown by Configure."""
-
-    def __init__(self, config_entry):
-        self.config_entry = config_entry
 
     async def async_step_init(self, user_input=None):
         if user_input:
@@ -108,8 +155,8 @@ class MCSSOptionsFlow(config_entries.OptionsFlow):
                     errors={"base": "cannot_connect"},
                 )
 
-            # URL and API-key entity are stored in config-entry data.
-            # Polling/history settings remain in options.
+            # URL and API-key entity are connection settings, so keep them in
+            # config-entry data while the timing/history values live in options.
             self.hass.config_entries.async_update_entry(
                 self.config_entry,
                 data={
@@ -133,7 +180,7 @@ class MCSSOptionsFlow(config_entries.OptionsFlow):
             step_id="init",
             data_schema=self._schema({
                 CONF_HOST: self.config_entry.data.get(
-                    CONF_HOST, "http://192.168.254.254:25560"
+                    CONF_HOST, "http://192.168.254.74:25560"
                 ),
                 CONF_API_KEY_ENTITY: self.config_entry.data.get(
                     CONF_API_KEY_ENTITY, ""
@@ -155,7 +202,7 @@ class MCSSOptionsFlow(config_entries.OptionsFlow):
         return vol.Schema({
             vol.Required(
                 CONF_HOST,
-                default=values.get(CONF_HOST, "http://192.168.254.254:25560"),
+                default=values.get(CONF_HOST, ""),
             ): str,
             vol.Required(
                 CONF_API_KEY_ENTITY,

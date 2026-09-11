@@ -1,7 +1,7 @@
 {
   "domain": "mcss",
   "name": "MC Server Soft",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "documentation": "https://github.com/Barrel0Memes97/mcss-homeassistant-hacs-V2",
   "issue_tracker": "https://github.com/Barrel0Memes97/mcss-homeassistant-hacs-V2/issues",
   "codeowners": [],
