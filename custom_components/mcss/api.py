@@ -11,7 +11,7 @@ class MCSSApi:
         self._api_key = api_key
 
     def _headers(self) -> dict[str, str]:
-        return {"X-Api-Key": self._api_key, "Accept": "application/json"}
+        return {"apiKey": self._api_key, "Accept": "application/json"}
 
     async def _request(self, method: str, path: str, **kwargs: Any) -> Any:
         headers = self._headers()
