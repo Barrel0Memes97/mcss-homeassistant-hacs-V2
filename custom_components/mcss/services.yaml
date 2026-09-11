@@ -1,0 +1,33 @@
+send_command:
+  name: Send command
+  description: Send a Minecraft console command to an MCSS server.
+  fields:
+    server_id:
+      name: Server ID
+      required: true
+      selector:
+        text:
+    command:
+      name: Command
+      required: true
+      selector:
+        text:
+
+server_action:
+  name: Server action
+  description: Start, stop, restart, or kill an MCSS server.
+  fields:
+    server_id:
+      name: Server ID
+      required: true
+      selector:
+        text:
+    action:
+      name: Action
+      description: 1=Stop, 2=Start, 3=Kill, 4=Restart.
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 4
+          mode: box

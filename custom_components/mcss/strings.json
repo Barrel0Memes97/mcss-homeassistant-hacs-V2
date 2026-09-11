@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MC Server Soft",
+        "description": "Connect to MC Server Soft API v2.",
+        "data": {
+          "host": "MCSS URL",
+          "api_key_entity": "API key input_text"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to MCSS or the API key was rejected.",
+      "invalid_key_entity": "The selected input_text has no usable API key."
+    }
+  }
+}
