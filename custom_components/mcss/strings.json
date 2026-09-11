@@ -5,7 +5,7 @@
         "title": "MC Server Soft",
         "description": "Connect to MC Server Soft API v2.",
         "data": {
-          "host": "MCSS URL",
+          "host": "MCSS API URL",
           "api_key_entity": "API key input_text"
         }
       }
@@ -13,6 +13,21 @@
     "error": {
       "cannot_connect": "Could not connect to MCSS or the API key was rejected.",
       "invalid_key_entity": "The selected input_text has no usable API key."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "MC Server Soft settings",
+        "description": "Configure the MCSS connection and polling/history behavior.",
+        "data": {
+          "host": "MCSS API URL",
+          "api_key_entity": "API key input_text",
+          "scan_interval": "Update interval (seconds)",
+          "console_interval": "Console refresh interval (seconds)",
+          "console_lines": "Console history lines"
+        }
+      }
     }
   }
 }

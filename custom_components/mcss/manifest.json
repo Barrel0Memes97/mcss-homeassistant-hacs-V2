@@ -1,9 +1,9 @@
 {
   "domain": "mcss",
   "name": "MC Server Soft",
-  "version": "0.2.1",
-  "documentation": "https://github.com/example/mcss-homeassistant",
-  "issue_tracker": "https://github.com/example/mcss-homeassistant/issues",
+  "version": "0.3.0",
+  "documentation": "https://github.com/Barrel0Memes97/mcss-homeassistant-hacs-V2",
+  "issue_tracker": "https://github.com/Barrel0Memes97/mcss-homeassistant-hacs-V2/issues",
   "codeowners": [],
   "config_flow": true,
   "iot_class": "local_polling",

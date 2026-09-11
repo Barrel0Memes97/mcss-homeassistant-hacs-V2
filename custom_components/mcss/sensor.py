@@ -50,7 +50,8 @@ class MCSSSensor(MCSSEntity, SensorEntity):
         if self.kind == "players":
             return st.get("playersOnline", 0)
         if self.kind == "player_list":
-            return len(s.get("players", []))
+            players = s.get("players", [])
+            return ", ".join(players) if players else "No players"
         if self.kind == "cpu":
             return st.get("cpu", 0)
         if self.kind == "memory":
@@ -73,7 +74,10 @@ class MCSSSensor(MCSSEntity, SensorEntity):
     def extra_state_attributes(self):
         s = self.server
         if self.kind in ("players", "player_list"):
-            return {"players": s.get("players", [])}
+            return {
+                "players": s.get("players", []),
+                "player_count": len(s.get("players", [])),
+            }
         if self.kind == "console":
             return {"lines": s.get("console", [])}
         return None
