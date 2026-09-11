@@ -12,9 +12,11 @@ from .const import (
     CONF_CONSOLE_INTERVAL,
     CONF_CONSOLE_LINES,
     CONF_HOST,
+    CONF_PLAYER_INTERVAL,
     CONF_SCAN_INTERVAL,
     DEFAULT_CONSOLE_INTERVAL,
     DEFAULT_CONSOLE_LINES,
+    DEFAULT_PLAYER_INTERVAL,
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
 )
@@ -52,6 +54,7 @@ class MCSSConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                             CONF_SCAN_INTERVAL: DEFAULT_SCAN_INTERVAL,
                             CONF_CONSOLE_INTERVAL: DEFAULT_CONSOLE_INTERVAL,
                             CONF_CONSOLE_LINES: DEFAULT_CONSOLE_LINES,
+                            CONF_PLAYER_INTERVAL: DEFAULT_PLAYER_INTERVAL,
                         },
                     )
 
@@ -172,6 +175,9 @@ class MCSSOptionsFlow(config_entries.OptionsFlow):
                     CONF_SCAN_INTERVAL: int(user_input[CONF_SCAN_INTERVAL]),
                     CONF_CONSOLE_INTERVAL: int(user_input[CONF_CONSOLE_INTERVAL]),
                     CONF_CONSOLE_LINES: int(user_input[CONF_CONSOLE_LINES]),
+                    CONF_PLAYER_INTERVAL: int(
+                        user_input[CONF_PLAYER_INTERVAL]
+                    ),
                 },
             )
 
@@ -193,6 +199,9 @@ class MCSSOptionsFlow(config_entries.OptionsFlow):
                 ),
                 CONF_CONSOLE_LINES: current.get(
                     CONF_CONSOLE_LINES, DEFAULT_CONSOLE_LINES
+                ),
+                CONF_PLAYER_INTERVAL: current.get(
+                    CONF_PLAYER_INTERVAL, DEFAULT_PLAYER_INTERVAL
                 ),
             }),
         )
@@ -226,4 +235,14 @@ class MCSSOptionsFlow(config_entries.OptionsFlow):
                     CONF_CONSOLE_LINES, DEFAULT_CONSOLE_LINES
                 ),
             ): vol.All(vol.Coerce(int), vol.Range(min=1, max=1000)),
+            vol.Required(
+                CONF_PLAYER_INTERVAL,
+                default=values.get(
+                    CONF_PLAYER_INTERVAL,
+                    DEFAULT_PLAYER_INTERVAL,
+                ),
+            ): vol.All(
+                vol.Coerce(int),
+                vol.Range(min=5, max=600),
+            ),
         })
